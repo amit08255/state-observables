@@ -37,7 +37,7 @@ observable.subscribe({
 ```
 
 * **func:** Subscriber callback function to execute on every update. The parameter passed to the function is value in observable.
-* **dependencies:** List of name of dependencies which is used to execute callback when any of them changes. **Dependency changes are detected by JSON passed in `next` method. The keys in the JSON passed is considered as new value updates and dependency changes.**
+* **dependencies:** List of name of dependencies which is used to execute callback when any of them changes. Empty dependency list means execute on every update. **Dependency changes are detected by JSON passed in `next` method. The keys in the JSON passed is considered as new value updates and dependency changes.**
 * **isImmediate:** If the value is `true` the callback function is executed immediately with current value in observer. `isBehaviorObservable` is the default value of this option. Setting this value will override the behavior of `isBehaviorObservable` option set during initialization. **Optional**.
 * **key:** Key is used to make sure no duplicate subscriber is registered. Default key is `main` and every subscriber is registered with a key. **Optional**.
 
