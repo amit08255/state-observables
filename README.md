@@ -6,7 +6,7 @@ Simple observable for handling state and its updates in any typescript applicati
 **Observable value should always be JSON.** Default initial value of the observable is `{}`. You can create the obsersable easily with some initial value in it:
 
 ```ts
-const observable = new Observable(initialValue, isBehaviorObservable);
+const observable = new StateObservables<type>(initialValue, isBehaviorObservable);
 ```
 
 Second parameter `isBehaviorObservable` is a boolean value whose default value is `false`. Behavior observable means that whenever a subscriber is registered it is executed immediately with current observable value.
@@ -14,13 +14,13 @@ Second parameter `isBehaviorObservable` is a boolean value whose default value i
 **Example:**
 
 ```ts
-const observable = new Observable({ a: 1 }); // creating with initial value
+const observable = new StateObservables<{a:number}>({ a: 1 }); // creating with initial value
 ```
 
 **Example 2:**
 
 ```ts
-const observable = new Observable({ id: 123, name: 'Amit' }, true); // creating behavior observable with initial value
+const observable = new StateObservables<{id: number, name: string}>({ id: 123, name: 'Amit' }, true); // creating behavior observable with initial value
 ```
 
 ## Adding Subscribers
