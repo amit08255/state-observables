@@ -41,12 +41,18 @@ class StateObservables {
     // check if any key of source exists in target
     // eslint-disable-next-line class-methods-use-this
     private compareJsonKeys(source, target) {
+        // if source is empty then return true
+        if (source.length < 1) {
+            return true;
+        }
+
         return Object.keys(source).some(
             (key) => target[key] !== null && target[key] !== undefined,
         );
     }
 
     // Broadcast value update to all subscribers
+    // empty dependency list means execute on every update.
     private broadcast(dependencies:Json) {
         Object.keys(this.subscribers).forEach(async (key) => {
             if (this.compareJsonKeys(this.subscribers[key].dependencies, dependencies)) {
@@ -62,6 +68,7 @@ class StateObservables {
     }
 
     // register a subscriber which will be executed if value update has dependency changed
+    // empty dependency list means execute on every update.
     subscribe({
         func, isImmediate = this.isBehaviorObservable, key = 'main', dependencies,
     }:SubscriberOption<Json>) {
