@@ -42,7 +42,7 @@ class StateObservables {
     // eslint-disable-next-line class-methods-use-this
     private compareJsonKeys(source, target) {
         // if source is empty then return true
-        if (source.length < 1) {
+        if (Object.keys(source).length < 1) {
             return true;
         }
 
