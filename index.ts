@@ -15,12 +15,12 @@ type PipedObservables<T> = {
     dispose: () => void,
 };
 
-class StateObservables {
+class StateObservables<T> {
     private value:Json;
 
     private isBehaviorObservable:boolean;
 
-    private subscribers:{[key:string]: { func: (val:Json) => any, dependencies: Json }} = {};
+    private subscribers:{[key:string]: { func: (val:T) => any, dependencies: Json }} = {};
 
     constructor(value:Json = {}, isBehaviorObservable = false) {
         this.value = value;
@@ -56,7 +56,7 @@ class StateObservables {
     private broadcast(dependencies:Json) {
         Object.keys(this.subscribers).forEach(async (key) => {
             if (this.compareJsonKeys(this.subscribers[key].dependencies, dependencies)) {
-                this.subscribers[key].func(this.value);
+                this.subscribers[key].func(this.value as T);
             }
         });
     }
@@ -71,13 +71,13 @@ class StateObservables {
     // empty dependency list means execute on every update.
     subscribe({
         func, isImmediate = this.isBehaviorObservable, key = 'main', dependencies,
-    }:SubscriberOption<Json>) {
+    }:SubscriberOption<T>) {
         this.subscribers[key] = {
             func, dependencies: this.array2Json(dependencies),
         };
 
         if (isImmediate) {
-            func(this.value);
+            func(this.value as T);
         }
     }
 
@@ -95,7 +95,7 @@ class StateObservables {
 
     // send protected version of observable which only allows limited functionality
     // use this to protect observable value from being updated directly and allow only updates
-    pipe():PipedObservables<Json> {
+    pipe():PipedObservables<T> {
         return ({
             subscribe: this.subscribe.bind(this),
             unsubscribe: this.unsubscribe.bind(this),
