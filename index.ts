@@ -16,14 +16,14 @@ type PipedObservables<T> = {
 };
 
 class StateObservables<T> {
-    private value:Json;
+    private value:T;
 
     private isBehaviorObservable:boolean;
 
     private subscribers:{[key:string]: { func: (val:T) => any, dependencies: Json }} = {};
 
     constructor(value:Json = {}, isBehaviorObservable = false) {
-        this.value = value;
+        this.value = value as T;
         this.isBehaviorObservable = isBehaviorObservable;
     }
 
@@ -51,6 +51,19 @@ class StateObservables<T> {
         );
     }
 
+    // eslint-disable-next-line class-methods-use-this
+    private isObject(x) {
+        return Object.prototype.toString.call(x) === '[object Object]';
+    }
+
+    private validateObject(x) {
+        if (this.isObject(x)) {
+            return true;
+        }
+
+        throw new Error('Invalid value. Object is expected.');
+    }
+
     // Broadcast value update to all subscribers
     // empty dependency list means execute on every update.
     private broadcast(dependencies:Json) {
@@ -62,7 +75,8 @@ class StateObservables<T> {
     }
 
     // Trigger value update with new value. When overwrite is true, overwrite value
-    next(value:Json, overwrite = false) {
+    next(value:T, overwrite = false) {
+        this.validateObject(value);
         this.value = overwrite ? value : { ...this.value, ...value };
         this.broadcast(this.array2Json(Object.keys(value)));
     }
