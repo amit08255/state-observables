@@ -55,7 +55,7 @@ observable.subscribe({
 
 ## Updating Value
 
-The `next` method allows you to update value in an observable. For every call to this method all subscriber function is executed. The optional second parameter accepts boolean value to either update the state JSON or overwrite it with passed JSON value.
+The `next` method allows you to update value in an observable. For every call to this method all subscriber function is executed. The optional second parameter accepts boolean value to either update the state JSON or overwrite it with passed JSON value. **When overwriting all subscribers will be called.**
 
 ```ts
 observable.next(value, shouldOverWrite);
