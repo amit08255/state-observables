@@ -66,9 +66,13 @@ class StateObservables<T> {
 
     // Broadcast value update to all subscribers
     // empty dependency list means execute on every update.
-    private broadcast(dependencies:Json) {
+    // when overwriting all subscribers will be called
+    private broadcast(dependencies:Json, isOverwriting = false) {
         Object.keys(this.subscribers).forEach(async (key) => {
-            if (this.compareJsonKeys(this.subscribers[key].dependencies, dependencies)) {
+            if (
+                isOverwriting
+                || this.compareJsonKeys(this.subscribers[key].dependencies, dependencies)
+            ) {
                 this.subscribers[key].func(this.value as T);
             }
         });
@@ -78,7 +82,7 @@ class StateObservables<T> {
     next(value:T, overwrite = false) {
         this.validateObject(value);
         this.value = overwrite ? value : { ...this.value, ...value };
-        this.broadcast(this.array2Json(Object.keys(value)));
+        this.broadcast(this.array2Json(Object.keys(value)), overwrite);
     }
 
     // register a subscriber which will be executed if value update has dependency changed
