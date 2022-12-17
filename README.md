@@ -67,3 +67,41 @@ observable.next(value, shouldOverWrite);
 observable.next({ id: 500 });
 ```
 
+
+## Unsubscribing Subscribers By Key
+
+Removing subscribers from observable is very easy using `unsubscribe` method. It has an optional parameter key whose default value is `main`.
+
+```ts
+observable.unsubscribe(key);
+```
+
+**Example:**
+
+```ts
+observable.unsubscribe('index');
+```
+
+## Unsubscribing All Subscribers
+
+The `dispose` method allows you to remove all subscribers from observables.
+
+```ts
+observable.dispose();
+```
+
+## Resetting Observable
+
+The `reset` method allows you to reset value of observable to the passed initial value.
+
+```ts
+observable.reset();
+```
+
+## Getting Protected Observable
+
+The `pipe` method allows you to get protected version of observable which does not allows changing values except reset functionality. It provides only these methods: `subscribe`, `unsubscribe` and `reset`.
+
+```ts
+observable.pipe();
+```
