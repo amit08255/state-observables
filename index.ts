@@ -12,10 +12,12 @@ type SubscriberOption<T> = {
 type PipedObservables<T> = {
     subscribe: (options:SubscriberOption<T>) => void,
     unsubscribe: (key?:string) => void,
-    dispose: () => void,
+    reset: () => void,
 };
 
 class StateObservables<T> {
+    private initialValue:T;
+
     private value:T;
 
     private isBehaviorObservable:boolean;
@@ -23,6 +25,7 @@ class StateObservables<T> {
     private subscribers:{[key:string]: { func: (val:T) => any, dependencies: Json }} = {};
 
     constructor(value:Json = {}, isBehaviorObservable = false) {
+        this.initialValue = value as T;
         this.value = value as T;
         this.isBehaviorObservable = isBehaviorObservable;
     }
@@ -104,6 +107,11 @@ class StateObservables<T> {
         delete this.subscribers[key];
     }
 
+    // reset observable to initial value
+    reset() {
+        this.next(this.initialValue);
+    }
+
     // unsubscribe all subscribers
     dispose() {
         Object.keys(this.subscribers).forEach((key) => {
@@ -117,7 +125,7 @@ class StateObservables<T> {
         return ({
             subscribe: this.subscribe.bind(this),
             unsubscribe: this.unsubscribe.bind(this),
-            dispose: this.dispose.bind(this),
+            reset: this.reset.bind(this),
         });
     }
 }
