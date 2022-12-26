@@ -1,5 +1,5 @@
 # State Observables
-Simple observable for handling state and its updates in any typescript application.It allows you to create a simple observable and add some subscribers to it. Whenever any updates happen on the observable it gets broadcasted to all subscribers.
+Simple observable for handling state and its updates in any typescript application.It allows you to create a simple observable and add some subscribers to it. Whenever any updates happen on the observable it gets broadcasted to all subscribers depending on it's dependencies.
 
 ## Creating Observable
 
