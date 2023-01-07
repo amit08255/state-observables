@@ -59,6 +59,16 @@ class StateObservables<T> {
         return Object.prototype.toString.call(x) === '[object Object]';
     }
 
+    // eslint-disable-next-line class-methods-use-this
+    private isFunction(x) {
+        const type = Object.prototype.toString.call(x);
+
+        return type === '[object Function]'
+            || type === '[object AsyncFunction]'
+            || type === '[object GeneratorFunction]'
+            || type === '[object AsyncGeneratorFunction]';
+    }
+
     private validateObject(x) {
         if (this.isObject(x)) {
             return true;
@@ -82,10 +92,20 @@ class StateObservables<T> {
     }
 
     // Trigger value update with new value. When overwrite is true, overwrite value
-    next(value:T, overwrite = false) {
-        this.validateObject(value);
-        this.value = overwrite ? value : { ...this.value, ...value };
-        this.broadcast(this.array2Json(Object.keys(value)), overwrite);
+    // Keys in value determines what dependencies are being updated to broadcast
+    // If value is a function, it will be provided with the current state and
+    // keys in returned value will be used to trigger dependencies update
+    next(value:T|((x:T) => T), overwrite = false) {
+        let nextVal:T = value as T;
+
+        if (this.isFunction(value)) {
+            const valFun:any = value;
+            nextVal = valFun(this.value);
+        }
+
+        this.validateObject(nextVal);
+        this.value = overwrite ? nextVal : { ...this.value, ...nextVal };
+        this.broadcast(this.array2Json(Object.keys(nextVal)), overwrite);
     }
 
     // register a subscriber which will be executed if value update has dependency changed
