@@ -55,7 +55,7 @@ observable.subscribe({
 
 ## Updating Value
 
-The `next` method allows you to update value in an observable. For every call to this method all subscriber function is executed depending on their dependency list (if list is empty, for any change subscriber is executed). The optional second parameter accepts boolean value to either update the state JSON or overwrite it with passed JSON value. **When overwriting all subscribers will be called.**
+The `next` method allows you to update value in an observable. For every call to this method all subscriber function is executed depending on their dependency list (if list is empty, for any change subscriber is executed). It simply uses spread operator to merge provided JSON value with current state JSON. The optional second parameter accepts boolean value to either update the state JSON or overwrite it with passed JSON value. **When overwriting all subscribers will be called.**
 
 It triggers value update with new value. Keys in value determines what dependencies are being updated to broadcast to subscribers. If value is a function, it will be provided with the current state and keys in returned value will be used to trigger dependencies update and subscribers.
 
