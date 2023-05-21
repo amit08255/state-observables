@@ -112,10 +112,6 @@ class StateObservables<T> {
         this.broadcast(this.array2Json(Object.keys(nextVal)), overwrite);
     }
 
-    get context() {
-        return this.value;
-    }
-
     // register a subscriber which will be executed if value update has dependency changed
     // empty dependency list means execute on every update.
     subscribe({
