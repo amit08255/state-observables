@@ -112,7 +112,7 @@ class StateObservables<T> {
         this.broadcast(this.array2Json(Object.keys(nextVal)), overwrite);
     }
 
-    context() {
+    get context() {
         return this.value;
     }
 
